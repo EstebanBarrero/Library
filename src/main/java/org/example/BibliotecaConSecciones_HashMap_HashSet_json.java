@@ -3,6 +3,8 @@ package org.example;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import views.View;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,42 +15,35 @@ import java.util.Stack;
 public class BibliotecaConSecciones_HashMap_HashSet_json {
 
     private static Map<String, Stack<String>> seccionesDeLibros = new HashMap<>();
+    //private static Set<String> seccionesExistentes = new HashSet<>();
     private static Set<String> seccionesExistentes = new HashSet<>();
+
+
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static View view = new View();
 
     public static void main(String[] args) {
-        cargarRegistrosDesdeJSON(); // Cargar registros desde JSON al iniciar el programa
 
+        cargarRegistrosDesdeJSON(); // Cargar registros desde JSON al iniciar el programa
+        System.out.println(seccionesExistentes.size());
         while (true) {
-            mostrarMenu();
+            view.showMainMenu();
             String entrada;
             try {
                 entrada = reader.readLine().trim();
                 int opcion = Integer.parseInt(entrada);
-
                 switch (opcion) {
-                    case 1:
-                        agregarLibroDevuelto();
-                        break;
-                    case 2:
-                        prestarLibro();
-                        break;
-                    case 3:
-                        mostrarLibrosEnBiblioteca();
-                        break;
-                    case 4:
-                        mostrarSecciones();
-                        break;
-                    case 5:
-                        crearSeccion();
-                        break;
-                    case 6:
+                    case 1 -> agregarLibroDevuelto();
+                    case 2 -> prestarLibro();
+                    case 3 -> mostrarLibrosEnBiblioteca();
+                    case 4 -> mostrarSecciones();
+                    case 5 -> crearSeccion();
+                    case 6 -> {
                         persistirRegistrosEnJSON(); // Guardar registros en JSON antes de salir
                         System.out.println("Saliendo del programa.");
                         return;
-                    default:
-                        System.out.println("Opción no válida. Intente de nuevo.");
-                        break;
+                    }
+                    default -> System.out.println("Opción no válida. Intente de nuevo.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Entrada no válida. Debe ingresar un número.");
@@ -57,20 +52,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
             }
         }
     }
-
-    private static void mostrarMenu() {
-        System.out.println("Menú:");
-        System.out.println("1. Agregar libro devuelto");
-        System.out.println("2. Prestar libro");
-        System.out.println("3. Mostrar libros en la biblioteca");
-        System.out.println("4. Mostrar secciones");
-        System.out.println("5. Crear sección");
-        System.out.println("6. Salir");
-        System.out.print("Elija una opción: ");
-    }
-
     private static void agregarLibroDevuelto() {                                        // Manejo de excepciones en caso de errores de entrada/salida
-
         if (seccionesExistentes.isEmpty()) {                                            // Comprueba si no hay secciones disponibles
             System.out.println("No hay secciones disponibles para agregar libros.");
             return;                                                                     // Sale de la función si no hay secciones disponibles
@@ -133,15 +115,15 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
     }
 
     private static void crearSeccion() {                                        // Función para crear una nueva sección
-
         System.out.print("Ingrese el nombre de la nueva sección: ");
         String nuevaSeccion = validarEntrada().toUpperCase();                   // Solicita al usuario el nombre de la nueva sección, luego llama a la función validarEntrada()
         // para obtener y validar la entrada, y convierte el nombre a mayúsculas.
         if (seccionesExistentes.contains(nuevaSeccion)) {                     // Comprueba si el conjunto seccionesExistentes (HashSet) ya contiene el nombre de la nueva sección (nuevaSeccion).
-
             System.out.println("La sección '" + nuevaSeccion + "' ya existe. Intente con otro nombre.");
         } else {
+            //TODO TOCA CREAR BIEN ESTE METODO YA QUE GENERA ERROR YA QUE NO ESTA TOMANDO NADA
             seccionesExistentes.add(nuevaSeccion);                            // Verifica si la nueva sección ya existe en el conjunto seccionesExistentes y muestra un mensaje si es el caso. Si no existe, agrega la nueva sección al conjunto.
+            System.out.println(seccionesExistentes.size());
             seccionesDeLibros.put(nuevaSeccion, new Stack<>());              // Crea una nueva pila para la sección y la agrega al mapa seccionesDeLibros (HashMap).
             System.out.println("Sección '" + nuevaSeccion + "' creada.");       // Imprime un mensaje para confirmar la creación exitosa de la sección.
         }
