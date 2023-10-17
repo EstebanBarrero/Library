@@ -123,7 +123,6 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         } else {
             //TODO TOCA CREAR BIEN ESTE METODO YA QUE GENERA ERROR YA QUE NO ESTA TOMANDO NADA
             seccionesExistentes.add(nuevaSeccion);                            // Verifica si la nueva sección ya existe en el conjunto seccionesExistentes y muestra un mensaje si es el caso. Si no existe, agrega la nueva sección al conjunto.
-            System.out.println(seccionesExistentes.size());
             seccionesDeLibros.put(nuevaSeccion, new Stack<>());              // Crea una nueva pila para la sección y la agrega al mapa seccionesDeLibros (HashMap).
             System.out.println("Sección '" + nuevaSeccion + "' creada.");       // Imprime un mensaje para confirmar la creación exitosa de la sección.
         }
