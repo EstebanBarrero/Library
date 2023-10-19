@@ -1,55 +1,24 @@
-package org.example;
+package models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import views.View;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
-public class BibliotecaConSecciones_HashMap_HashSet_json {
+import static org.example.BibliotecaConSecciones_HashMap_HashSet_json.validarEntrada;
+import static presenters.Presenter.*;
 
-    private static Map<String, Stack<String>> seccionesDeLibros = new HashMap<>();
-    private static Set<String> seccionesExistentes = new HashSet<>();
+public class Model {
 
-
-    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    private static View view = new View();
-
-    public static void main(String[] args) {
-        cargarRegistrosDesdeJSON(); // Cargar registros desde JSON al iniciar el programa
-        while (true) {
-            view.showMainMenu();
-            String entrada;
-            try {
-                entrada = reader.readLine().trim();
-                int opcion = Integer.parseInt(entrada);
-                switch (opcion) {
-                    case 1 -> agregarLibroDevuelto();
-                    case 2 -> prestarLibro();
-                    case 3 -> mostrarLibrosEnBiblioteca();
-                    case 4 -> mostrarSecciones();
-                    case 5 -> crearSeccion();
-                    case 6 -> {
-                        persistirRegistrosEnJSON(); // Guardar registros en JSON antes de salir
-                        System.out.println("Saliendo del programa.");
-                        return;
-                    }
-                    default -> System.out.println("Opción no válida. Intente de nuevo.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada no válida. Debe ingresar un número.");
-            } catch (IOException e) {
-                System.out.println("Error de entrada/salida: " + e.getMessage());
-            }
-        }
+    public Model() {
     }
-    private static void agregarLibroDevuelto() {                                        // Manejo de excepciones en caso de errores de entrada/salida
+
+    public static void agregarLibroDevuelto() {                                        // Manejo de excepciones en caso de errores de entrada/salida
         if (seccionesExistentes.isEmpty()) {                                            // Comprueba si no hay secciones disponibles
             System.out.println("No hay secciones disponibles para agregar libros.");
             return;                                                                     // Sale de la función si no hay secciones disponibles
@@ -66,8 +35,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         seccionDeLibros.push(libroDevuelto.toUpperCase());                          // Agrega el nombre del libro (convertido a mayúsculas) a la sección
         System.out.println("Libro agregado a la sección '" + seccion + "'.");           // Muestra un mensaje indicando que el libro se agregó a la sección
     }
-
-    private static void prestarLibro() {                                         // Función para prestar un libro de una sección de la biblioteca
+    public static void prestarLibro() {                                         // Función para prestar un libro de una sección de la biblioteca
         if (seccionesExistentes.isEmpty()) {                                        // Comprueba si no hay secciones disponibles en la biblioteca.
             System.out.println("No hay secciones disponibles para prestar libros."); // Si no hay secciones, muestra un mensaje indicando que no hay secciones disponibles y finaliza la función.
             return;
@@ -87,7 +55,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         }
     }
 
-    private static void mostrarLibrosEnBiblioteca() {                             // Función para mostrar los libros en la biblioteca por sección
+    public static void mostrarLibrosEnBiblioteca() {                             // Función para mostrar los libros en la biblioteca por sección
         if (seccionesExistentes.isEmpty()) {                                          // Comprueba si no hay secciones disponibles en la biblioteca (HashSet).
             System.out.println("No hay secciones disponibles para mostrar libros.");// Si no hay secciones, muestra un mensaje indicando que no hay secciones para mostrar libros y finaliza la función.
             return;
@@ -100,7 +68,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         }
     }
 
-    private static void mostrarSecciones() {                                    // Función para mostrar las secciones disponibles
+    public static void mostrarSecciones() {                                    // Función para mostrar las secciones disponibles
         if (seccionesExistentes.isEmpty()) {                                    // Comprueba si no hay secciones disponibles
             System.out.println("No hay secciones disponibles para mostrar."); // Muestra un mensaje si no hay secciones
             return;                                                             // Sale de la función si no hay secciones disponibles
@@ -111,7 +79,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         }
     }
 
-    private static void crearSeccion() {                                        // Función para crear una nueva sección
+    public static void crearSeccion() {                                        // Función para crear una nueva sección
         System.out.print("Ingrese el nombre de la nueva sección: ");
         String nuevaSeccion = validarEntrada().toUpperCase();                   // Solicita al usuario el nombre de la nueva sección, luego llama a la función validarEntrada()
         // para obtener y validar la entrada, y convierte el nombre a mayúsculas.
@@ -123,7 +91,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         }
     }
 
-    private static void persistirRegistrosEnJSON() {
+    public static void persistirRegistrosEnJSON() {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -139,7 +107,7 @@ public class BibliotecaConSecciones_HashMap_HashSet_json {
         }
     }
 
-    private static void cargarRegistrosDesdeJSON() {
+    public static void cargarRegistrosDesdeJSON() {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
