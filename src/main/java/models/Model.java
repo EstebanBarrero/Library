@@ -3,14 +3,14 @@ package models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Stack;
 
-import static org.example.BibliotecaConSecciones_HashMap_HashSet_json.validarEntrada;
 import static presenters.Presenter.*;
 
 public class Model {
@@ -93,11 +93,12 @@ public class Model {
 
     public static void persistirRegistrosEnJSON() {
         ObjectMapper objectMapper = new ObjectMapper();
-
+        // Configurar ObjectMapper para formatear el JSON de manera legible
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             String json = objectMapper.writeValueAsString(seccionesDeLibros);
-            try (FileWriter fileWriter = new FileWriter("registros.json")) {
-                fileWriter.write(json);
+            try {
+                objectMapper.writeValue(new File("registros.json"), seccionesDeLibros);
                 System.out.println("Registros guardados en 'registros.json'");
             } catch (IOException e) {
                 System.err.println("Error al guardar los registros en JSON: " + e.getMessage());
@@ -111,7 +112,7 @@ public class Model {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            FileReader fileReader = new FileReader("Library/registros.json");
+            FileReader fileReader = new FileReader("registros.json");
             Map<String, Stack<String>> registros = objectMapper.readValue(fileReader, new TypeReference<Map<String, Stack<String>>>() {});
             seccionesDeLibros = registros;
             seccionesExistentes = registros.keySet();

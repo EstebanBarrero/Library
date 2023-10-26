@@ -25,8 +25,9 @@ public class Presenter {
     }
 
     public static void menu(){
+        boolean status = true;
         model.cargarRegistrosDesdeJSON(); // Cargar registros desde JSON al iniciar el programa
-        while (true) {
+        while (status= true) {
             view.showMainMenu();
             String entrada;
             try {
@@ -39,11 +40,12 @@ public class Presenter {
                     case 4 -> model.mostrarSecciones();
                     case 5 -> model.crearSeccion();
                     case 6 -> {
-                        //TODO REVISAR LA PERSISTENCIA DE DATOS EN JSON
                         model.persistirRegistrosEnJSON(); // Guardar registros en JSON antes de salir
                         System.out.println("Saliendo del programa.");
+                        status=false;
                         return;
                     }
+
                     default -> System.out.println("Opción no válida. Intente de nuevo.");
                 }
             } catch (NumberFormatException e) {
